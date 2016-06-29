@@ -15,6 +15,7 @@ import net.masterthought.cucumber.generators.FeaturesOverviewPage;
 import net.masterthought.cucumber.generators.StepsOverviewPage;
 import net.masterthought.cucumber.generators.TagReportPage;
 import net.masterthought.cucumber.generators.TagsOverviewPage;
+import net.masterthought.cucumber.generators.TagsHierarchyPage;
 import net.masterthought.cucumber.json.Feature;
 import net.masterthought.cucumber.json.support.TagObject;
 
@@ -107,6 +108,8 @@ public class ReportBuilder {
             new TagReportPage(reportResult, configuration, tagObject).generatePage();
         }
 
+        new TagsHierarchyPage(reportResult, configuration).generatePage();
+        
         new StepsOverviewPage(reportResult, configuration).generatePage();
         new FailuresOverviewPage(reportResult, configuration).generatePage();
     }

@@ -42,12 +42,13 @@ public class PageIntegrationTest extends PageTest {
         NavigationItemAssertion[] menuItems = navigation.getNaviBarLinks();
 
         navigation.hasPluginName();
-        assertThat(menuItems).hasSize(4);
+        assertThat(menuItems).hasSize(5);
 
         menuItems[0].hasLinkToFeatures();
         menuItems[1].hasLinkToTags();
-        menuItems[2].hasLinkToSteps();
-        menuItems[3].hasLinkToFailures();
+        menuItems[2].hasLinkToTagsHierarchy();
+        menuItems[3].hasLinkToSteps();
+        menuItems[4].hasLinkToFailures();
     }
 
     @Test
@@ -69,7 +70,7 @@ public class PageIntegrationTest extends PageTest {
         NavigationItemAssertion[] menuItems = navigation.getNaviBarLinks();
 
         navigation.hasPluginName();
-        assertThat(navigation.getNaviBarLinks()).hasSize(7);
+        assertThat(navigation.getNaviBarLinks()).hasSize(8);
 
         menuItems[0].hasLinkToJenkins(configuration);
         menuItems[1].hasLinkToPreviousResult(configuration, page.getWebPage());
@@ -77,8 +78,9 @@ public class PageIntegrationTest extends PageTest {
 
         menuItems[3].hasLinkToFeatures();
         menuItems[4].hasLinkToTags();
-        menuItems[5].hasLinkToSteps();
-        menuItems[6].hasLinkToFailures();
+        menuItems[5].hasLinkToTagsHierarchy();
+        menuItems[6].hasLinkToSteps();
+        menuItems[7].hasLinkToFailures();
     }
 
     @Test
