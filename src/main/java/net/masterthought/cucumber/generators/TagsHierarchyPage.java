@@ -33,7 +33,7 @@ public class TagsHierarchyPage extends AbstractPage {
 
     @Override
     public void prepareReport() {
-        List<TagObject> tags = report.getAllTags();
+        List<TagObject> tags = report.getTopLevel(0);
         context.put("all_tags", tags);
         context.put("report_summary", report.getTagReport());
 

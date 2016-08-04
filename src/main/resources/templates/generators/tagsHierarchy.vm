@@ -6,6 +6,7 @@
 
   <script type="text/javascript">
   #parse("/templates/js/tags-chart.js")
+  #parse("/templates/js/toggle.js")
   </script>
 </head>
 <body>
@@ -34,7 +35,7 @@
       #if($all_tags.isEmpty())
         <p>You have no tags in your cucumber report</p>
       #else
-        #includeStatsTable("Tag", $parallel, $all_tags, $report_summary)
+        #includeStatsHierarchyTable("Tag", $parallel, $all_tags, $report_summary)
       #end
     </div>
   </div>

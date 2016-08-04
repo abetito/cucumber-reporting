@@ -8,6 +8,8 @@
 #parse("/templates/macros/page/lead.vm")
 
 #parse("/templates/macros/report/statsTable.vm")
+#parse("/templates/macros/report/statsHierarchyTable.vm")
+#parse("/templates/macros/report/statsHierarchyRow.vm")
 #parse("/templates/macros/report/reportTable.vm")
 #parse("/templates/macros/report/reportHeader.vm")
 #parse("/templates/macros/report/element.vm")

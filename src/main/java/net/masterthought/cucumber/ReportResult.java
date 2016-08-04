@@ -27,7 +27,8 @@ import net.masterthought.cucumber.reports.Reportable;
 
 public class ReportResult {
 
-    private final List<Feature> allFeatures = new ArrayList<>();
+	private static final String TOP_LEVEL = "TOP_LEVEL";
+	private final List<Feature> allFeatures = new ArrayList<>();
     private final Map<String, TagObject> allTags = new TreeMap<>();
     private final Map<String, StepObject> allSteps = new TreeMap<>();
 
@@ -37,6 +38,8 @@ public class ReportResult {
 
     private final OverviewReport featuresReport = new OverviewReport("Features");
     private final OverviewReport tagsReport = new OverviewReport("Tags");
+	
+	private List<TagObject> topLevel = new ArrayList<TagObject>();
 
     public ReportResult(List<Feature> features) {
         this.buildTime = getCurrentTime();
@@ -52,6 +55,78 @@ public class ReportResult {
 
     public List<TagObject> getAllTags() {
         return mapToSortedList(allTags.values());
+    }
+    
+    public List<TagObject> getTopLevel(int hierarchyBy) {
+    	
+		List<List<String>> normalizedTags = normalizeAllTags(hierarchyBy);
+		buildHierarchy(normalizedTags);
+    	
+    	System.out.println("Top Level: ");
+    	for (TagObject tag : topLevel) {
+    		System.out.println("Tag: " + tag.getName());
+    	}
+    	
+        return topLevel;
+    }
+    
+    private List<List<String>> normalizeAllTags(int hierarchyBy) {
+    	List<List<String>> normalizedTags = new ArrayList<>();
+    	for (Feature feature : allFeatures) {
+    		Tag[] featureTags = feature.getTags();
+    		
+    		if (featureTags != null) {
+    			List<String> tagArr = new ArrayList<>();
+        		for (int index = 0; index < featureTags.length; index++) {
+        			if (index < hierarchyBy) {
+        				tagArr.add(featureTags[index].getName());
+        			} else {
+        				break;
+        			}
+        		}
+        		
+        		for (int index = featureTags.length-1; index >= 0; index--) {
+        			if (index >= hierarchyBy) {
+        				tagArr.add(0, featureTags[index].getName());
+        			} else {
+        				break;
+        			}
+        		}
+        		normalizedTags.add(tagArr);
+    		}
+    	}
+    	
+    	return normalizedTags;
+    }
+    
+    private void buildHierarchy(List<List<String>> normalizedTags) {
+    	
+    	for (List<String> featureTags : normalizedTags) {
+    		for (int index = 0; index < featureTags.size(); index++) {
+    			String parent = TOP_LEVEL;
+    			if (index > 0) {
+    				parent = featureTags.get(index-1);
+    			}
+    			
+    			TagObject parentObj = allTags.get(parent);
+				String tagName = featureTags.get(index);
+				TagObject childObj = allTags.get(tagName);
+				
+				if (childObj != null) {
+					if (parent == TOP_LEVEL) {
+						if (!topLevel.contains(childObj)) {
+							topLevel.add(childObj);
+						}
+					} else if (parentObj != null) {
+						parentObj.addChild(childObj);
+					} else {
+						System.out.println("buildHierarchy cannot find parent - " + parent);
+					}
+				} else {
+					System.out.println("buildHierarchy cannot find child - " + tagName);
+				}
+    		}
+    	}
     }
 
     public List<StepObject> getAllSteps() {
@@ -162,7 +237,7 @@ public class ReportResult {
     }
 
     private TagObject addTagObject(String name) {
-        TagObject tagObject = allTags.get(name);
+    	TagObject tagObject = allTags.get(name);
         if (tagObject == null) {
             tagObject = new TagObject(name);
             allTags.put(tagObject.getName(), tagObject);

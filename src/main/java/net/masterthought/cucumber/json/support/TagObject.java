@@ -26,6 +26,8 @@ public class TagObject implements Reportable, Comparable<TagObject> {
 
     /** Default status for current tag: {@link Status#PASSED} if all elements pass {@link Status#FAILED} otherwise. */
     private Status status = Status.PASSED;
+    
+    private List<TagObject> children;
 
     public TagObject(String tagName) {
         if (StringUtils.isEmpty(tagName)) {
@@ -33,10 +35,25 @@ public class TagObject implements Reportable, Comparable<TagObject> {
         }
         this.tagName = tagName;
 
+        children = new ArrayList<TagObject>();
+        
         // eliminate characters that might be invalid as a file tagName
         this.reportFileName = tagName.replace("@", "").replaceAll(":", "-").trim() + ".html";
     }
 
+    public boolean isLeaf() {
+    	return children == null;
+    }
+    
+    public void addChild(TagObject child) {
+    	if (!children.contains(child))
+    		children.add(child);
+    }
+    
+    public List<TagObject> getChildren() {
+    	return children;
+    }
+    
     @Override
     public String getName() {
         return tagName;

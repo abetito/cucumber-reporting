@@ -1,0 +1,101 @@
+#macro(includeStatsHierarchyTable, $table_key, $parallel, $elements, $report_summary)
+
+<table id="tablesorter" class="stats-table table-hover">
+  #includeReportHeader($table_key, $parallel)
+
+  <tbody>
+    #foreach($element in $elements)
+      <tr>
+        <td class="tagname"><a href="#" onclick="toggleTableRow('$element.getName()')">+  $element.getName()</a></td>
+        #if($parallel)
+          <td>$element.getDeviceName()</td>
+        #end
+
+        <td>$element.getScenarios()</td>
+        <td>$element.getPassedScenarios()</td>
+        <td #if($element.getFailedScenarios() > 0)  class="failed"  #end>$element.getFailedScenarios()</td>
+        <td>$element.getSteps()</td>
+        <td>$element.getPassedSteps()</td>
+        <td #if($element.getFailedSteps() > 0)    class="failed"    #end>$element.getFailedSteps()</td>
+        <td #if($element.getSkippedSteps() > 0)   class="skipped"   #end>$element.getSkippedSteps()</td>
+        <td #if($element.getPendingSteps() > 0)   class="pending"   #end>$element.getPendingSteps()</td>
+        <td #if($element.getUndefinedSteps() > 0) class="undefined" #end>$element.getUndefinedSteps()</td>
+        <td #if($element.getMissingSteps() > 0)   class="missing"   #end>$element.getMissingSteps()</td>
+        <td class="duration" data-value="$element.getDurations()">$element.getFormattedDurations()</td>
+        <td class="$element.getStatus().getRawName()">$element.getStatus().getLabel()</td>
+      </tr>
+      
+      
+	  	#if(!$element.isLeaf())
+      		#foreach($child in $element.getChildren())
+	      		<tr name="$element.getName()">
+			        <td class="tagname" style="padding-left:20px"><a href="#" onclick="toggleTableRow('$child.getName()')">+  $child.getName()</a></td>
+			        #if($parallel)
+			          <td>$child.getDeviceName()</td>
+			        #end
+			
+			        <td>$child.getScenarios()</td>
+			        <td>$child.getPassedScenarios()</td>
+			        <td #if($child.getFailedScenarios() > 0)  class="failed"  #end>$child.getFailedScenarios()</td>
+			        <td>$child.getSteps()</td>
+			        <td>$child.getPassedSteps()</td>
+			        <td #if($child.getFailedSteps() > 0)    class="failed"    #end>$child.getFailedSteps()</td>
+			        <td #if($child.getSkippedSteps() > 0)   class="skipped"   #end>$child.getSkippedSteps()</td>
+			        <td #if($child.getPendingSteps() > 0)   class="pending"   #end>$child.getPendingSteps()</td>
+			        <td #if($child.getUndefinedSteps() > 0) class="undefined" #end>$child.getUndefinedSteps()</td>
+			        <td #if($child.getMissingSteps() > 0)   class="missing"   #end>$child.getMissingSteps()</td>
+			        <td class="duration" data-value="$child.getDurations()">$child.getFormattedDurations()</td>
+			        <td class="$child.getStatus().getRawName()">$child.getStatus().getLabel()</td>
+			    </tr>
+		    
+		    	#if(!$child.isLeaf())
+			      	#foreach($grandson in $child.getChildren())
+			      		<tr name="$element.getName() $child.getName()">
+					        <td class="tagname" style="padding-left:40px"><a href="$grandson.getReportFileName()">$grandson.getName()</a></td>
+					        #if($parallel)
+					          <td>$grandson.getDeviceName()</td>
+					        #end
+					
+					        <td>$grandson.getScenarios()</td>
+					        <td>$grandson.getPassedScenarios()</td>
+					        <td #if($grandson.getFailedScenarios() > 0)  class="failed"  #end>$grandson.getFailedScenarios()</td>
+					        <td>$grandson.getSteps()</td>
+					        <td>$grandson.getPassedSteps()</td>
+					        <td #if($grandson.getFailedSteps() > 0)    class="failed"    #end>$grandson.getFailedSteps()</td>
+					        <td #if($grandson.getSkippedSteps() > 0)   class="skipped"   #end>$grandson.getSkippedSteps()</td>
+					        <td #if($grandson.getPendingSteps() > 0)   class="pending"   #end>$grandson.getPendingSteps()</td>
+					        <td #if($grandson.getUndefinedSteps() > 0) class="undefined" #end>$grandson.getUndefinedSteps()</td>
+					        <td #if($grandson.getMissingSteps() > 0)   class="missing"   #end>$grandson.getMissingSteps()</td>
+					        <td class="duration" data-value="$grandson.getDurations()">$grandson.getFormattedDurations()</td>
+					        <td class="$grandson.getStatus().getRawName()">$grandson.getStatus().getLabel()</td>
+						</tr>
+			      	#end
+		    	#end
+      		#end
+		#end
+    #end
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td>$elements.size()</td>
+      #if($parallel)
+        <td>-</td>
+      #end
+      <td>$report_summary.getScenarios()</td>
+      <td>$report_summary.getPassedScenarios()</td>
+      <td>$report_summary.getFailedScenarios()</td>
+      <td>$report_summary.getSteps()</td>
+      <td>$report_summary.getPassedSteps()</td>
+      <td>$report_summary.getFailedSteps()</td>
+      <td>$report_summary.getSkippedSteps()</td>
+      <td>$report_summary.getPendingSteps()</td>
+      <td>$report_summary.getUndefinedSteps()</td>
+      <td>$report_summary.getMissingSteps()</td>
+      <td class="duration">$report_summary.getFormattedDurations()</td>
+      <td>Totals</td>
+    </tr>
+  </tfoot>
+</table>
+
+#end
